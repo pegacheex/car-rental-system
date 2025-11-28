@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.carental.controller.DashboardController"
+            stylesheets="@../css/style.css">
+    
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            
+            <Text text="Car Rental System" styleClass="header-text"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userLabel"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="secondary"/>
+        </HBox>
+    </top>
+    
+    <left>
+        <VBox spacing="10" styleClass="sidebar">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            
+            <Button text="Available Cars" onAction="#showAvailableCars" styleClass="sidebar-button"/>
+            <Button text="My Bookings" onAction="#showMyBookings" styleClass="sidebar-button"/>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <!-- Admin-only buttons -->
+            <Button fx:id="manageVehiclesBtn" text="Manage Vehicles" onAction="#showManageVehicles" 
+                    styleClass="sidebar-button admin-only" visible="false"/>
+            <Button fx:id="manageUsersBtn" text="Manage Users" onAction="#showManageUsers" 
+                    styleClass="sidebar-button admin-only" visible="false"/>
+            <Button fx:id="reportsBtn" text="Reports" onAction="#showReports" 
+                    styleClass="sidebar-button admin-only" visible="false"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <StackPane>
+            <!-- Available Cars View -->
+            <VBox fx:id="availableCarsView" spacing="10" visible="false">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="Available Cars" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField" promptText="Search cars..." prefWidth="200"/>
+                </HBox>
+                
+                <TableView fx:id="carsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="makeColumn" text="Make"/>
+                        <TableColumn fx:id="modelColumn" text="Model"/>
+                        <TableColumn fx:id="yearColumn" text="Year"/>
+                        <TableColumn fx:id="rateColumn" text="Daily Rate (₹)"/>
+                        <TableColumn fx:id="statusColumn" text="Status"/>
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Book Selected Car" onAction="#handleBookCar" 
+                            styleClass="primary" disable="${carsTable.selectionModel.selectedItem == null}"/>
+                </HBox>
+            </VBox>
+            
+            <!-- My Bookings View -->
+            <VBox fx:id="myBookingsView" spacing="10" visible="false">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <Text text="My Bookings" styleClass="section-title"/>
+                
+                <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="bookingIdColumn" text="Booking ID"/>
+                        <TableColumn fx:id="carColumn" text="Car"/>
+                        <TableColumn fx:id="startDateColumn" text="Start Date"/>
+                        <TableColumn fx:id="endDateColumn" text="End Date"/>
+                        <TableColumn fx:id="totalAmountColumn" text="Total Amount (₹)"/>
+                        <TableColumn fx:id="statusColumn" text="Status"/>
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Cancel Booking" onAction="#handleCancelBooking" 
+                            styleClass="danger" disable="${bookingsTable.selectionModel.selectedItem == null}"/>
+                    <Button text="Make Payment" onAction="#handlePayment" 
+                            styleClass="primary" disable="${bookingsTable.selectionModel.selectedItem == null}"/>
+                    <Button text="Generate Invoice" onAction="#handleGenerateInvoice" 
+                            styleClass="primary" disable="${bookingsTable.selectionModel.selectedItem == null}"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Admin Views -->
+            <VBox fx:id="manageVehiclesView" spacing="10" visible="false">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="Manage Vehicles" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Add New Vehicle" onAction="#handleAddVehicle" styleClass="primary"/>
+                </HBox>
+                
+                <TableView fx:id="vehiclesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="vehicleIdColumn" text="ID"/>
+                        <TableColumn fx:id="vehicleMakeColumn" text="Make"/>
+                        <TableColumn fx:id="vehicleModelColumn" text="Model"/>
+                        <TableColumn fx:id="vehicleYearColumn" text="Year"/>
+                        <TableColumn fx:id="vehicleRateColumn" text="Daily Rate (₹)"/>
+                        <TableColumn fx:id="vehicleStatusColumn" text="Status"/>
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Edit Vehicle" onAction="#handleEditVehicle" 
+                            styleClass="primary" disable="${vehiclesTable.selectionModel.selectedItem == null}"/>
+                    <Button text="Delete Vehicle" onAction="#handleDeleteVehicle" 
+                            styleClass="danger" disable="${vehiclesTable.selectionModel.selectedItem == null}"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Reports View -->
+            <VBox fx:id="reportsView" spacing="10" visible="false">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <Text text="Reports" styleClass="section-title"/>
+                
+                <HBox spacing="20">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Text text="Revenue Report" styleClass="subsection-title"/>
+                        <TableView fx:id="revenueTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="monthColumn" text="Month"/>
+                                <TableColumn fx:id="revenueColumn" text="Revenue (₹)"/>
+                                <TableColumn fx:id="bookingsColumn" text="Total Bookings"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Text text="Popular Vehicles" styleClass="subsection-title"/>
+                        <TableView fx:id="popularVehiclesTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="popularCarColumn" text="Car"/>
+                                <TableColumn fx:id="bookingsCountColumn" text="Total Bookings"/>
+                                <TableColumn fx:id="revenueGeneratedColumn" text="Revenue Generated (₹)"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Export Reports" onAction="#handleExportReports" styleClass="primary"/>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane> 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.carental.controller.RegisterController"
+      stylesheets="@../css/style.css">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Text text="Register New Account" styleClass="title-text"/>
+    
+    <VBox spacing="10" styleClass="login-form">
+        <Label text="Username:"/>
+        <TextField fx:id="usernameField" promptText="Choose a username"/>
+        
+        <Label text="Password:"/>
+        <PasswordField fx:id="passwordField" promptText="Choose a password"/>
+        
+        <Label text="Confirm Password:"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password"/>
+        
+        <Label text="Email:"/>
+        <TextField fx:id="emailField" promptText="Enter your email"/>
+        
+        <Label text="Full Name:"/>
+        <TextField fx:id="fullNameField" promptText="Enter your full name"/>
+        
+        <Label text="Phone:"/>
+        <TextField fx:id="phoneField" promptText="Enter your phone number"/>
+        
+        <Button text="Register" onAction="#handleRegister" styleClass="login-button"/>
+        
+        <Hyperlink text="Back to Login" onAction="#handleBackToLogin"/>
+    </VBox>
+    
+    <Label fx:id="messageLabel" styleClass="message-label"/>
+</VBox> 
